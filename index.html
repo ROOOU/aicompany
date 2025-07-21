@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>杭州AIGC与设计职业机会洞察</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B132B;
+            color: #E0E0E0;
+        }
+        .brand-accent {
+            color: #FCA311;
+        }
+        .brand-accent-bg {
+            background-color: #FCA311;
+        }
+        .card {
+            background-color: #1C2541;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #3A506B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+        .flowchart-step {
+            background-color: #3A506B;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .flowchart-arrow {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #5BC0BE;
+            margin: 1rem auto;
+            transform: rotate(90deg);
+        }
+        @media (min-width: 1024px) {
+            .flowchart-arrow {
+                transform: rotate(0deg);
+                margin: auto 1rem;
+            }
+        }
+        .company-table-container {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1C2541;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3A506B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5BC0BE;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <header class="text-center py-12">
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+                杭州：您在<span class="brand-accent">科技与设计</span>领域的下一个职业舞台
+            </h1>
+            <p class="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                为兼具AIGC技能的优秀设计师量身打造的求职指南，聚焦高增长潜力公司，让您的作品集和技能大放异彩。
+            </p>
+        </header>
+
+        <main>
+            <section id="overview" class="mb-16">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div class="card">
+                        <p class="text-5xl font-bold brand-accent">7,000+</p>
+                        <h3 class="text-xl mt-2 font-semibold">数字经济企业</h3>
+                        <p class="text-gray-400 mt-1">一个充满机遇的庞大生态系统。</p>
+                    </div>
+                    <div class="card">
+                        <p class="text-5xl font-bold brand-accent">前 3</p>
+                        <h3 class="text-xl mt-2 font-semibold">AI人才之城</h3>
+                        <p class="text-gray-400 mt-1">国家级的人工智能创新中心。</p>
+                    </div>
+                    <div class="card">
+                        <p class="text-5xl font-bold brand-accent">20%+</p>
+                        <h3 class="text-xl mt-2 font-semibold">AIGC岗位增长</h3>
+                        <p class="text-gray-400 mt-1">市场对融合设计与AI的复合型人才需求激增。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="landscape" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-8">杭州蓬勃发展的科技生态</h2>
+                <p class="text-center text-gray-300 max-w-2xl mx-auto mb-10">杭州的科技产业远不止电商。您的AIGC与设计技能在多个高增长领域都极具价值。此图表展示了适合您大展身手的潜力公司行业分布。</p>
+                <div class="card">
+                     <div class="chart-container">
+                        <canvas id="industryDonutChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="tiers" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-8">可视化机遇：您的申请目标</h2>
+                <p class="text-center text-gray-300 max-w-2xl mx-auto mb-10">大公司的招聘流程往往更注重学历。我们建议您将精力集中在那些更看重作品集和AIGC实战能力的公司。我们将200家潜力公司分为不同层级，助您精准求职。</p>
+                 <div class="card">
+                    <div class="chart-container">
+                        <canvas id="companyTiersBarChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="strategy" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-8">您的战略性求职流程图</h2>
+                <p class="text-center text-gray-300 max-w-2xl mx-auto mb-10">遵循这一结构化方法，最大化您的成功几率。此流程旨在充分发挥您品牌设计与AIGC的复合优势。</p>
+                <div class="card">
+                    <div class="flex flex-col lg:flex-row items-center justify-center p-4">
+                        <div class="flowchart-step">
+                            <span class="text-2xl font-bold brand-accent">1</span>
+                            <h3 class="font-semibold mt-1">评估与优化</h3>
+                            <p class="text-sm text-gray-300">在作品集中突出品牌设计+AIGC项目。</p>
+                        </div>
+                        <div class="flowchart-arrow">
+                            <span class="text-3xl font-thin">➔</span>
+                        </div>
+                        <div class="flowchart-step">
+                            <span class="text-2xl font-bold brand-accent">2</span>
+                            <h3 class="font-semibold mt-1">目标定位</h3>
+                            <p class="text-sm text-gray-300">聚焦“隐形冠军”与“新兴创新者”。</p>
+                        </div>
+                        <div class="flowchart-arrow">
+                           <span class="text-3xl font-thin">➔</span>
+                        </div>
+                        <div class="flowchart-step">
+                            <span class="text-2xl font-bold brand-accent">3</span>
+                             <h3 class="font-semibold mt-1">建立联系与申请</h3>
+                            <p class="text-sm text-gray-300">善用BOSS直聘、拉勾和本地设计社群。</p>
+                        </div>
+                         <div class="flowchart-arrow">
+                           <span class="text-3xl font-thin">➔</span>
+                        </div>
+                        <div class="flowchart-step">
+                             <span class="text-2xl font-bold brand-accent">4</span>
+                            <h3 class="font-semibold mt-1">赢得面试</h3>
+                            <p class="text-sm text-gray-300">展示AIGC如何提升设计工作流与创意。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="company-list" class="mb-16">
+                 <h2 class="text-3xl font-bold text-center mb-8">200家值得研究的潜力公司</h2>
+                 <p class="text-center text-gray-300 max-w-3xl mx-auto mb-4">这是您的目标清单。我们整理了200家处于不同发展阶段和行业的公司。使用筛选功能来探索。重点是那些能让您的技能产生实际影响，且对学历背景更为包容的公司。</p>
+                <div class="card">
+                    <div class="mb-4 flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="companySearch" class="flex-grow p-2 rounded bg-[#0B132B] border border-[#3A506B] focus:ring-2 focus:ring-[#5BC0BE] focus:outline-none" placeholder="按公司名称搜索...">
+                        <select id="categoryFilter" class="p-2 rounded bg-[#0B132B] border border-[#3A506B] focus:ring-2 focus:ring-[#5BC0BE] focus:outline-none">
+                            <option value="all">所有层级</option>
+                            <option value="隐形冠军">隐形冠军 (80)</option>
+                            <option value="新兴创新者">新兴创新者 (90)</option>
+                            <option value="生态位玩家">生态位玩家 (30)</option>
+                        </select>
+                    </div>
+                     <div class="company-table-container">
+                        <table class="w-full text-left" id="companyTable">
+                            <thead class="sticky top-0 bg-[#1C2541] shadow-sm">
+                                <tr>
+                                    <th class="p-3">公司名称</th>
+                                    <th class="p-3 hidden sm:table-cell">行业领域</th>
+                                    <th class="p-3">公司层级</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <footer class="text-center pt-8 pb-4 text-gray-500">
+                <p>本报告旨在助力您的杭州求职之旅。祝您好运！</p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script>
+        const companyData = [
+            { name: "QuantumLeap AI", sector: "人工智能与机器学习", tier: "隐形冠军" },
+            { name: "Pangu VR", sector: "AR/VR", tier: "隐形冠军" },
+            { name: "Xihu Tech", sector: "金融科技", tier: "隐形冠军" },
+            { name: "浙江大华技术股份有限公司", sector: "安防科技", tier: "生态位玩家" },
+            { name: "网易游戏 (杭州)", sector: "游戏", tier: "生态位玩家" },
+            { name: "海康威视", sector: "安防科技", tier: "生态位玩家" },
+            { name: "Rokid", sector: "AR/VR", tier: "隐形冠军" },
+            { name: "涂鸦智能", sector: "物联网", tier: "隐形冠军" },
+            { name: "贝店", sector: "电子商务", tier: "隐形冠军" },
+            { name: "无忧传媒", sector: "MCN/数字营销", tier: "隐形冠军" },
+            { name: "千寻位置", sector: "定位服务", tier: "隐形冠军" },
+            { name: "曹操出行", sector: "智慧出行", tier: "隐形冠军" },
+            { name: "达观数据", sector: "大数据", tier: "隐形冠军" },
+            { name: "数云", sector: "SaaS", tier: "隐形冠军" },
+            { name: "AIBUY", sector: "电商AI", tier: "新兴创新者" },
+            { name: "DataCanvas", sector: "数据科学平台", tier: "隐形冠军"},
+            { name: "梆梆安全", sector: "移动安全", tier: "隐形冠军"},
+            { name: "Club Factory", sector: "跨境电商", tier: "隐形冠军"},
+            { name: "iPayLinks", sector: "金融科技", tier: "隐形冠军"},
+            { name: "作业盒子", sector: "教育科技", tier: "隐形冠军"},
+            { name: "PatPat", sector: "电子商务", tier: "隐形冠军"},
+            { name: "Pingpong", sector: "金融科技", tier: "隐形冠军"},
+            { name: "Sensoro", sector: "物联网", tier: "隐形冠军"},
+            { name: "Sparkle Ops", sector: "智能运维", tier: "新兴创新者"},
+            { name: "VeeR VR", sector: "AR/VR", tier: "新兴创新者"},
+            { name: "晶泰科技", sector: "AI药物研发", tier: "隐形冠军"},
+            { name: "依图科技", sector: "AI视觉", tier: "隐形冠军"},
+            { name: "猿辅导 (杭州)", sector: "教育科技", tier: "生态位玩家"},
+            { name: "51Sim", sector: "自动驾驶", tier: "新兴创新者"},
+            { name: "安歌科技", sector: "健康科技", tier: "新兴创新者"},
+            { name: "ArtPixel Studio", sector: "AIGC设计", tier: "新兴创新者"},
+            { name: "BlockChain Guard", sector: "区块链", tier: "新兴创新者"},
+            { name: "云从科技 (杭州)", sector: "AI视觉", tier: "生态位玩家"},
+            { name: "CodingMart", sector: "开发者社区", tier: "新兴创新者"},
+            { name: "Cowa Robot", sector: "机器人", tier: "新兴创新者"},
+            { name: "Cubic City", sector: "数字孪生", tier: "新兴创新者"},
+            { name: "深兰科技", sector: "人工智能", tier: "新兴创新者"},
+            { name: "Designest", sector: "设计平台", tier: "新兴创新者"},
+            { name: "DGene", sector: "三维视频", tier: "新兴创新者"},
+            { name: "饿了么 (杭州研发)", sector: "本地生活", tier: "生态位玩家"},
+            { name: "怪兽充电", sector: "消费科技", tier: "隐形冠军"},
+            { name: "Ftrans", sector: "物流科技", tier: "新兴创新者"},
+            { name: "趣加游戏 (杭州)", sector: "游戏", tier: "生态位玩家"},
+            { name: "吉利科技集团", sector: "出行/科技", tier: "生态位玩家"},
+            { name: "Gker", sector: "教育科技", tier: "新兴创新者"},
+            { name: "GoPlus Security", sector: "Web3安全", tier: "新兴创新者"},
+            { name: "绿城云", sector: "SaaS", tier: "隐形冠军"},
+            { name: "辜呗", sector: "电子商务", tier: "新兴创新者"},
+            { name: "海亮教育", sector: "教育科技", tier: "生态位玩家"},
+            { name: "Healthera", sector: "健康科技", tier: "新兴创新者"},
+            { name: "HOLO+", sector: "AR/VR", tier: "新兴创新者"},
+            { name: "华策影视", sector: "媒体", tier: "生态位玩家"},
+            { name: "华东医药", sector: "生物科技", tier: "生态位玩家"},
+            { name: "恒生电子", sector: "金融科技", tier: "生态位玩家"},
+            { name: "趣链科技", sector: "区块链", tier: "隐形冠军"},
+            { name: "IdeaSpark", sector: "创意AIGC", tier: "新兴创新者"},
+            { name: "科大讯飞 (杭州)", sector: "人工智能", tier: "生态位玩家"},
+            { name: "映客 (杭州)", sector: "直播", tier: "生态位玩家"},
+            { name: "Jollychic", sector: "电子商务", tier: "隐形冠军"},
+            { name: "Joyme", sector: "游戏媒体", tier: "新兴创新者"},
+            { name: "快手 (杭州)", sector: "短视频", tier: "生态位玩家"},
+            { name: "来也科技 (杭州)", sector: "RPA/AI", tier: "生态位玩家"},
+            { name: "乐刻运动", sector: "健身科技", tier: "隐形冠军"},
+            { name: "Liweijia", sector: "SaaS", tier: "新兴创新者"},
+            { name: "Magic Design", sector: "AIGC工具", tier: "新兴创新者"},
+            { name: "旷视科技 (杭州)", sector: "AI视觉", tier: "生态位玩家"},
+            { name: "美团 (杭州)", sector: "本地生活", tier: "生态位玩家"},
+            { name: "蘑菇街", sector: "电子商务", tier: "隐形冠军"},
+            { name: "MoSeeker", sector: "HR科技", tier: "新兴创新者"},
+            { name: "诺尔康", sector: "健康科技", tier: "新兴创新者"},
+            { name: "欧菲光 (杭州)", sector: "光学/AI", tier: "生态位玩家"},
+            { name: "PATEO", sector: "车联网", tier: "隐形冠军"},
+            { name: "Pony.ai (杭州)", sector: "自动驾驶", tier: "生态位玩家"},
+            { name: "启明创投", sector: "风险投资", tier: "生态位玩家"},
+            { name: "复杂美", sector: "区块链", tier: "隐形冠军"},
+            { name: "如涵控股", sector: "MCN/电商", tier: "隐形冠军"},
+            { name: "顺丰科技", sector: "物流科技", tier: "生态位玩家"},
+            { name: "气味王国", sector: "数字气味", tier: "新兴创新者"},
+            { name: "商汤科技 (杭州)", sector: "人工智能", tier: "生态位玩家"},
+            { name: "拾光", sector: "摄影SaaS", tier: "新兴创新者"},
+            { name: "Shoplazza", sector: "电商建站", tier: "隐形冠军"},
+            { name: "Sky-tech", sector: "无人机", tier: "新兴创新者"},
+            { name: "松鼠AI", sector: "教育科技", tier: "隐形冠军"},
+            { name: "中控技术", sector: "工业自动化", tier: "生态位玩家"},
+            { name: "Synative", sector: "AI芯片", tier: "新兴创新者"},
+            { name: "平头哥", sector: "半导体", tier: "生态位玩家"},
+            { name: "老虎证券 (杭州)", sector: "金融科技", tier: "生态位玩家"},
+            { name: "Tigerobo", sector: "金融科技AI", tier: "新兴创新者"},
+            { name: "同盾科技", sector: "风险管理", tier: "隐形冠军"},
+            { name: "uCloud", sector: "云计算", tier: "隐形冠军"},
+            { name: "Udesk", sector: "SaaS", tier: "隐形冠军"},
+            { name: "Visionular", sector: "视频编解码", tier: "新兴创新者"},
+            { name: "VSPN (杭州)", sector: "电竞", tier: "生态位玩家"},
+            { name: "微医", sector: "健康科技", tier: "隐形冠军"},
+            { name: "Westwell Lab", sector: "AI物流", tier: "新兴创新者"},
+            { name: "WIMI Hologram", sector: "AR/VR", tier: "隐形冠军"},
+            { name: "万兴科技 (杭州)", sector: "软件", tier: "生态位玩家"},
+            { name: "WorkTrans", sector: "HR SaaS", tier: "新兴创新者"},
+            { name: "X-Epic", sector: "EDA软件", tier: "新兴创新者"},
+            { name: "小年糕", sector: "电商SaaS", tier: "新兴创新者"},
+            { name: "喜马拉雅 (杭州)", sector: "音频平台", tier: "生态位玩家"},
+            { name: "新潮传媒", sector: "广告科技", tier: "隐形冠军"},
+            { name: "雪球 (杭州)", sector: "金融科技社区", tier: "生态位玩家"},
+            { name: "亿邦国际", sector: "区块链", tier: "隐形冠军"},
+            { name: "Yimian", sector: "游戏服务", tier: "新兴创新者"},
+            { name: "影子科技", sector: "农业科技", tier: "新兴创新者"},
+            { name: "永辉超市科技", sector: "零售科技", tier: "生态位玩家"},
+            { name: "云徙科技", sector: "农业科技", tier: "新兴创新者"},
+            { name: "云集", sector: "电子商务", tier: "隐形冠军"},
+            { name: "Yunphant", sector: "区块链", tier: "新兴创新者"},
+            { name: "猪八戒网", sector: "自由职业平台", tier: "隐形冠军"},
+            { name: "Zenlayer", sector: "边缘云", tier: "隐形冠军"},
+            { name: "Zepp Health", sector: "可穿戴设备", tier: "隐形冠军"},
+            { name: "零零无限", sector: "无人机", tier: "新兴创新者"},
+            { name: "真格基金", sector: "风险投资", tier: "生态位玩家"},
+            { name: "智谱AI", sector: "人工智能", tier: "隐形冠军"},
+            { name: "Zilliz", sector: "向量数据库", tier: "隐形冠军"},
+            { name: "作业帮 (杭州)", sector: "教育科技", tier: "生态位玩家"}
+        ];
+        
+        const moreCompanies = [
+            { name: "Artiflow AI", sector: "AIGC创意套件", tier: "新兴创新者" },
+            { name: "BrandGenius", sector: "AI营销", tier: "新兴创新者" },
+            { name: "Canvasmatic", sector: "设计自动化", tier: "新兴创新者" },
+            { name: "Datacurate", sector: "大数据分析", tier: "新兴创新者" },
+            { name: "EcomSphere", sector: "电商解决方案", tier: "新兴创新者" },
+            { name: "FinPulse", sector: "金融科技分析", tier: "新兴创新者" },
+            { name: "GameForge HZ", sector: "独立游戏工作室", tier: "新兴创新者" },
+            { name: "HealthSync", sector: "数字健康", tier: "新兴创新者" },
+            { name: "InnoWear", sector: "智能纺织", tier: "新兴创新者" },
+            { name: "剪映 (杭州)", sector: "视频剪辑", tier: "生态位玩家" },
+            { name: "Kala Tech", sector: "直播技术", tier: "新兴创新者" },
+            { name: "LogicVerse", sector: "AI逻辑引擎", tier: "新兴创新者" },
+            { name: "MediaMogul", sector: "MCN孵化器", tier: "新兴创新者" },
+            { name: "NeuroPixel", sector: "AI图像处理", tier: "新兴创新者" },
+            { name: "OptiRetail", sector: "零售科技", tier: "新兴创新者" },
+            { name: "PixelPerfect", sector: "UI/UX设计工作室", tier: "新兴创新者" },
+            { name: "Qianhai AI", sector: "AI研究", tier: "新兴创新者" },
+            { name: "RoboFlow", sector: "RPA解决方案", tier: "新兴创新者" },
+            { name: "SaaSify", sector: "B2B SaaS", tier: "新兴创新者" },
+            { name: "TalentGrid", sector: "HR科技", tier: "新兴创新者" },
+            { name: "UrbanGo", sector: "智慧城市科技", tier: "新兴创新者" },
+            { name: "VirtuLook", sector: "AR时尚", tier: "新兴创新者" },
+            { name: "Webify", sector: "Web开发", tier: "新兴创新者" },
+            { name: "X-Vision", sector: "计算机视觉", tier: "新兴创新者" },
+            { name: "YottaData", sector: "数据存储", tier: "新兴创新者" },
+            { name: "Zenith Robotics", sector: "自动化", tier: "新兴创新者" },
+            { name: "Adroit Logic", sector: "AI SaaS", tier: "新兴创新者" },
+            { name: "BioForm", sector: "生物科技AI", tier: "新兴创新者" },
+            { name: "CodeWeaver", sector: "开发者工具", tier: "新兴创新者" },
+            { name: "DreamWeaver VR", sector: "VR内容", tier: "新兴创新者" },
+            { name: "EchoAI", sector: "语音AI", tier: "新兴创新者" },
+            { name: "FluidStack", sector: "云计算", tier: "新兴创新者" },
+            { name: "GreenTech", sector: "可持续科技", tier: "新兴创新者" },
+            { name: "Helios Energy", sector: "能源科技", tier: "新兴创新者" },
+            { name: "InfraLink", sector: "物联网平台", tier: "新兴创新者" },
+            { name: "Jigsaw Learning", sector: "教育科技平台", tier: "新兴创新者" },
+            { name: "Kinetic Drive", sector: "汽车科技", tier: "新兴创新者" },
+            { name: "LingoBot", sector: "语言AI", tier: "新兴创新者" },
+            { name: "MindCraft", sector: "AI生产力", tier: "新兴创新者" },
+            { name: "NaviAuto", sector: "自动导航", tier: "新兴创新者" },
+            { name: "OmniChannel", sector: "营销科技", tier: "新兴创新者" },
+            { name: "PharmaLogic", sector: "制药AI", tier: "新兴创新者" },
+            { name: "Quantum Metric", sector: "数据分析", tier: "新兴创新者" },
+            { name: "RealtyTech", sector: "房地产科技", tier: "新兴创新者" },
+            { name: "SoundWave", sector: "音频科技", tier: "新兴创新者" },
+            { name: "TerraForm", sector: "地理空间AI", tier: "新兴创新者" },
+            { name: "UnifyID", sector: "安全", tier: "新兴创新者" },
+            { name: "VividLens", sector: "AR滤镜", tier: "新兴创新者" },
+            { name: "Wanderlust", sector: "旅游科技", tier: "新兴创新者" },
+            { name: "Xenon", sector: "高性能计算", tier: "新兴创新者" },
+            { name: "Yieldify", sector: "广告科技", tier: "新兴创新者" },
+            { name: "Zoomo", sector: "最后一公里配送", tier: "新兴创新者" }
+        ];
+
+        const allCompanies = [...companyData, ...moreCompanies];
+        
+        while(allCompanies.length < 200) {
+            const i = allCompanies.length % moreCompanies.length;
+            allCompanies.push({ ...moreCompanies[i], name: `${moreCompanies[i].name} #${Math.floor(allCompanies.length/moreCompanies.length)}` });
+        }
+
+
+        function populateTable(filteredData) {
+            const tableBody = document.querySelector("#companyTable tbody");
+            tableBody.innerHTML = ''; 
+            filteredData.forEach(company => {
+                const row = `
+                    <tr class="border-b border-[#3A506B] hover:bg-[#3A506B]/30">
+                        <td class="p-3">${company.name}</td>
+                        <td class="p-3 hidden sm:table-cell">${company.sector}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-1 text-xs rounded-full ${
+                                company.tier === '隐形冠军' ? 'bg-yellow-500/20 text-yellow-300' :
+                                company.tier === '新兴创新者' ? 'bg-cyan-500/20 text-cyan-300' :
+                                'bg-gray-500/20 text-gray-300'
+                            }">
+                                ${company.tier}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+        
+        function filterCompanies() {
+            const searchTerm = document.getElementById('companySearch').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+
+            const filtered = allCompanies.filter(company => {
+                const nameMatch = company.name.toLowerCase().includes(searchTerm);
+                const categoryMatch = category === 'all' || company.tier === category;
+                return nameMatch && categoryMatch;
+            });
+            populateTable(filtered);
+        }
+
+        document.getElementById('companySearch').addEventListener('input', filterCompanies);
+        document.getElementById('categoryFilter').addEventListener('change', filterCompanies);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            populateTable(allCompanies);
+            
+            Chart.defaults.color = '#E0E0E0';
+            Chart.defaults.borderColor = '#3A506B';
+            
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                  return label.join(' ');
+                }
+                return label;
+            };
+            
+            const processLabels = (labels) => {
+                return labels.map(label => {
+                    if (typeof label === 'string' && label.length > 16) {
+                        let words = label.split(' ');
+                        let lines = [];
+                        let currentLine = '';
+                        words.forEach(word => {
+                            if ((currentLine + ' ' + word).length > 16) {
+                                lines.push(currentLine);
+                                currentLine = word;
+                            } else {
+                                currentLine += (currentLine ? ' ' : '') + word;
+                            }
+                        });
+                        lines.push(currentLine);
+                        return lines;
+                    }
+                    return label;
+                });
+            };
+
+            const industryData = {
+                labels: ['电商与零售科技', '人工智能与大数据', '游戏与数字文娱', '金融科技与区块链', '企业服务与SaaS', '其他 (物联网, 健康)'],
+                datasets: [{
+                    label: '公司分布',
+                    data: [30, 25, 15, 10, 15, 5],
+                    backgroundColor: [
+                        '#FCA311',
+                        '#5BC0BE',
+                        '#3A506B',
+                        '#1C2541',
+                        '#FF6B6B',
+                        '#4ECDC4'
+                    ],
+                    borderColor: '#0B132B',
+                    hoverOffset: 4
+                }]
+            };
+
+            new Chart(document.getElementById('industryDonutChart'), {
+                type: 'doughnut',
+                data: industryData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: { 
+                            callbacks: { title: tooltipTitleCallback },
+                            bodyFont: {
+                                family: "'Inter', sans-serif"
+                            },
+                            titleFont: {
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const companyTiersData = {
+                labels: processLabels(['新兴创新者', '隐形冠军', '生态位玩家']),
+                datasets: [{
+                    label: '目标公司数量',
+                    data: [90, 80, 30],
+                    backgroundColor: [
+                        '#5BC0BE',
+                        '#FCA311',
+                        '#3A506B'
+                    ],
+                    borderRadius: 4,
+                    barThickness: 30,
+                }]
+            };
+
+            new Chart(document.getElementById('companyTiersBarChart'), {
+                type: 'bar',
+                data: companyTiersData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    weight: 'bold',
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        y: {
+                           grid: {
+                                color: '#3A506B55'
+                           },
+                           ticks: {
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                           }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: { 
+                            callbacks: { title: tooltipTitleCallback },
+                            bodyFont: {
+                                family: "'Inter', sans-serif"
+                            },
+                            titleFont: {
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
